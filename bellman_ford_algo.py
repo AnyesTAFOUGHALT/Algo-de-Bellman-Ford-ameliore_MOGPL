@@ -5,24 +5,39 @@ def bellman_ford(G , source):
     """
     Ajouter le nb d'itérations
     """
+
+    # L = [source]
+    # while L!=[] :
+    #     print(L)
+    #     successors = list(G.successors(L[0]))
+    #     for v in successors :
+    #         new_dist = distance[L[0]][0] + G.get_edge_data(L[0], v)['weight']
+    #         if new_dist < distance[v][0] :
+    #             distance[v] = [new_dist , L[0]]
+    #     L.remove(L[0])
+    #     L.extend(successors)
+    # new_G = nx.DiGraph()
+    # for v in list(G.nodes) :
+    #     s = distance[v][1]
+    #     if s != None :
+    #         new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
+    # return new_G
+
+    
     distance = dict.fromkeys(list(G.nodes) , [math.inf, None])
-    distance[source] = [0 , None]
-    L = [source]
-    while L!=[] :
-        successors = list(G.successors(L[0]))
-        for v in successors :
-            new_dist = distance[L[0]][0] + G.get_edge_data(L[0], v)['weight']
-            if new_dist < distance[v][0] :
-                distance[v] = [new_dist , L[0]]
-        L.remove(L[0])
-        L.extend(successors)
+    distance[source] = [0 , None]   
+    for v in range(len(list(G.nodes))-1):
+        for arete in list(G.edges):
+            new_dist =  distance[arete[0]][0] + G.get_edge_data(arete[0], arete[1])['weight']
+            if distance[arete[1]][0] > new_dist :
+                distance[arete[1]] = [new_dist , arete[0]]
+
     new_G = nx.DiGraph()
     for v in list(G.nodes) :
         s = distance[v][1]
         if s != None :
-            new_G.add_edge(s, v, G.get_edge_data(s, v)['weight'])
+            new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
     return new_G
-    
 
 
 
@@ -56,7 +71,7 @@ def getMaxiDiff(G):
 
 def GloutonFas(G):
     s1,s2 = [] ,[]
-    G_copy = G.copy
+    G_copy = G.copy()
     while(list(G_copy.nodes)!=[]):
         
         sources = getSources(G_copy)
@@ -77,9 +92,9 @@ def GloutonFas(G):
             G_copy.remove_node(sommet_max_diff)
 
     return s1+s2 
-ssss
-        
-            
+
+  
+           
         
 
 
