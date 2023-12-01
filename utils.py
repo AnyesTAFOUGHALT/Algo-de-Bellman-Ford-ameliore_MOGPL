@@ -62,51 +62,27 @@ def draw_graph(G,titre , pos = None):
     plt.show()
     return pos
 
-    # if pos is None:
-    #     pos = nx.spring_layout(G, seed=42)  # Utilisation d'une graine pour la reproductibilité
-
-    # plt.figure(figsize=(10, 8))  # Ajuster la taille de la figure selon les besoins
-
-    # # Afficher le graphe avec les poids
-    # nx.draw(
-    #     G,
-    #     pos,
-    #     with_labels=True,
-    #     font_weight='bold',
-    #     node_color='skyblue',
-    #     edge_color='gray',
-    #     arrowsize=20,
-    #     width=2,  # Largeur des arêtes
-    #     alpha=0.7,  # Transparence des arêtes
-    #     connectionstyle='arc3,rad=0.1',  # Style de connexion des arêtes
-    # )
-
-    # # Ajouter les étiquettes de poids sur les arêtes
-    # edge_labels = nx.get_edge_attributes(G, 'weight')
-    # nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red', bbox=dict(facecolor='white', edgecolor='white', boxstyle='round,pad=0.3'))
-
-    # plt.title(titre)
-    # plt.axis('off')  # Désactiver les axes pour une meilleure présentation
-
-    # plt.show()
-    # return pos
-
-
-
-# def has_negative_cycle(graph , source):
-#     try:
-#         # Utiliser l'algorithme de détection de cycle négatif
-#         cycle = nx.find_negative_cycle(graph,source, weight='weight')
-#         return True
-#     except nx.NetworkXError :
-#         return False
+def has_negative_cycle(graph , source):
+    try:
+        # Utiliser l'algorithme de détection de cycle négatif
+        cycle = nx.find_negative_cycle(graph,source, weight='weight')
+        return True
+    except nx.NetworkXError :
+        return False
       
 def genrartion_de_graphes(G):
     G_poid = G.copy()
-    for arete in list(G_poid.edges()): 
-        G_poid[arete[0]][arete[1]]['weight'] = random.randint(-10, 10)
+    while True:
+        for arete in list(G_poid.edges()): 
+            G_poid[arete[0]][arete[1]]['weight'] = random.randint(-10, 10)
 
-    return G_poid
+        possede_cycle = False
+        for v in list(G.nodes):
+            if has_negative_cycle(G_poid , v) :
+                possede_cycle = True
+                break
+        if not possede_cycle : 
+            return G_poid
 
 def union(G1 , G2 , G3):
     T = nx.DiGraph()

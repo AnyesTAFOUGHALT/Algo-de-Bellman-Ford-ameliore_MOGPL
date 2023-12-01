@@ -2,6 +2,7 @@ import utils as ut
 import networkx as nx
 import bellman_ford_algo as bf
 import random
+import matplotlib.pyplot as plt
 """
 G = nx.DiGraph()
 G.add_edge(1, 2)
@@ -37,30 +38,35 @@ print(bf.GloutonFas(G))
 
 
 #ut.draw_graph(ut.genrartion_de_graphes(G))
-N = 4
-p = 0.6
+N = 7
+p = 0.4
 
 def main() :
-    #-------------------Question 3 ----------------------------
+    #-------------------Question 3 & 4 ----------------------------
     #génération d'un graph G
-    G = nx.erdos_renyi_graph(N, p, directed=True)
+    # G = nx.erdos_renyi_graph(N, p, directed=True)
 
-    G1 = ut.genrartion_de_graphes(G)
-    pos = ut.draw_graph(G1,"G1")
-    blmnfr , iteration = bf.bellman_ford(G1 , 0)
-    ut.draw_graph(blmnfr,"eee", pos )
-    print(" Nb iterations : ",iteration)
-
+    # G1 = ut.genrartion_de_graphes(G)
+    # print("ff")
     # G2 = ut.genrartion_de_graphes(G)
+    # print("ff")
+
     # G3 = ut.genrartion_de_graphes(G)
+    # print("ff")
     
     # H = ut.genrartion_de_graphes(G)
+    # print("ff")
     
     # source =  ut.source(G)
+    # print("ff")
 
     # #------------------- Question 4 ----------------------------
-    # G1_BF = bf.bellman_ford(G1 , source)[0]   
+    # G1_BF = bf.bellman_ford(G1 , source)[0]  
+    # print("ff")
+
     # G2_BF = bf.bellman_ford(G2 , source)[0] 
+    # print("ff")
+
     # G3_BF = bf.bellman_ford(G3 , source)[0]  
 
     # print("source", source)
@@ -92,6 +98,72 @@ def main() :
     # H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
     # print("Le nombre d'itération avec l'ordre ", ordre_alea," est : ", nb_iter)
     # ut.draw_graph(H_BF_alea,"H_BF" , pos)
+
+
+    #----------------- Question 9 -------------------------------
+    iterations = 15
+    nb_iter_with_gloutonFas_ordre= []
+    nb_iter_alea = []
+    for i in range(iterations) :
+        print("iteration",i)
+        #génération d'un graph G
+        G = nx.erdos_renyi_graph(N, p, directed=True)
+
+        G1 = ut.genrartion_de_graphes(G)
+        
+        G2 = ut.genrartion_de_graphes(G)
+        
+
+        G3 = ut.genrartion_de_graphes(G)
+        
+
+        H = ut.genrartion_de_graphes(G)
+        
+
+        source =  ut.source(G)
+        
+
+        #------------------- Question 4 ----------------------------
+        G1_BF = bf.bellman_ford(G1 , source)[0]  
+        
+
+        G2_BF = bf.bellman_ford(G2 , source)[0] 
+        
+
+        G3_BF = bf.bellman_ford(G3 , source)[0]  
+
+        print("source", source)
+
+
+
+        T = ut.union(G1_BF , G2_BF , G3_BF) 
+
+
+        #----------------- Question 5 -------------------------------
+        ordre = bf.GloutonFas(T)
+
+        #----------------- Question 6 -------------------------------
+        H_BF , nb_iter= bf.bellman_ford(H , source , ordre)
+        print("Le nombre d'itération avec l'ordre ", ordre," est : ", nb_iter)
+        nb_iter_with_gloutonFas_ordre.append(nb_iter)
+
+        #----------------- Question 7 -------------------------------
+        ordre_alea  = list(range(G.number_of_nodes()))
+        random.shuffle(ordre_alea)
+
+        H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
+        print("Le nombre d'itération avec l'ordre ", ordre_alea," est : ", nb_iter)
+        nb_iter_alea.append(nb_iter)
+
+    plt.plot( nb_iter_with_gloutonFas_ordre, 'b', label="Nombre d'itération avec l'orde de GloutonFast")
+    plt.plot(nb_iter_alea, 'r', label="Nombre d'itérations avec un ordre aléatoire")
+    plt.ylabel('Nombre d\'itération')
+    plt.legend()
+    plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
+    plt.tight_layout()
+    plt.savefig("Plots/Analyse du nombre d'itération de l'algorithme Bellman Ford.png")
+    
+    plt.show()
 
 
 if __name__ == "__main__":
