@@ -16,7 +16,6 @@ def bellman_ford(G , source, ordre = None):
     plus_courts_chemins.append(distance)
     nb_etapes = 1
 
-    taille = len(ordre_traitement)
     while(True): 
         nouveaux_plus_courts_chemins = plus_courts_chemins[nb_etapes-1].copy()
         for sommet in ordre_traitement :
@@ -28,7 +27,7 @@ def bellman_ford(G , source, ordre = None):
                     nouveaux_plus_courts_chemins[sommet] = [new_chemin,v]
             
 
-        if ut.sont_similaires(nouveaux_plus_courts_chemins,etape_precedente):
+        if ut.sont_similaires(nouveaux_plus_courts_chemins,plus_courts_chemins[nb_etapes-1]):
             plus_courts_chemins.append(nouveaux_plus_courts_chemins)
             new_G = nx.DiGraph()
             distance = plus_courts_chemins[nb_etapes-1]

@@ -84,16 +84,15 @@ def genrartion_de_graphes(G):
         if not possede_cycle : 
             return G_poid
 
-def union(G1 , G2 , G3):
+def union(listG):
     T = nx.DiGraph()
 
-    for G in [G1 , G2 , G3]:
+    for G in listG:
         for arete in G.edges(data=True):
             u , v , data = arete
             if not T.has_edge(u,v):
                 T.add_edge(u , v)
     return T
-
 def source(G) :
     n = G.number_of_nodes()/2
     for v in list(G.nodes) :

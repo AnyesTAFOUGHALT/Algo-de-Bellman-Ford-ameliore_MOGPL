@@ -38,7 +38,7 @@ print(bf.GloutonFas(G))
 
 
 #ut.draw_graph(ut.genrartion_de_graphes(G))
-N = 7
+N = 5
 p = 0.4
 
 def main() :
@@ -101,7 +101,7 @@ def main() :
 
 
     #----------------- Question 9 -------------------------------
-    iterations = 15
+    iterations = 20
     nb_iter_with_gloutonFas_ordre= []
     nb_iter_alea = []
     for i in range(iterations) :
@@ -110,33 +110,37 @@ def main() :
         G = nx.erdos_renyi_graph(N, p, directed=True)
 
         G1 = ut.genrartion_de_graphes(G)
-        
         G2 = ut.genrartion_de_graphes(G)
-        
-
         G3 = ut.genrartion_de_graphes(G)
+        G4 = ut.genrartion_de_graphes(G)
+        G5 = ut.genrartion_de_graphes(G)
+        G6 = ut.genrartion_de_graphes(G)
+        G7 = ut.genrartion_de_graphes(G)
+        G8 = ut.genrartion_de_graphes(G)
+        G9 = ut.genrartion_de_graphes(G)
         
 
         H = ut.genrartion_de_graphes(G)
         
-
         source =  ut.source(G)
         
 
         #------------------- Question 4 ----------------------------
         G1_BF = bf.bellman_ford(G1 , source)[0]  
-        
-
         G2_BF = bf.bellman_ford(G2 , source)[0] 
-        
-
         G3_BF = bf.bellman_ford(G3 , source)[0]  
+        G4_BF = bf.bellman_ford(G1 , source)[0]  
+        G5_BF = bf.bellman_ford(G2 , source)[0] 
+        G6_BF = bf.bellman_ford(G3 , source)[0]  
+        G7_BF = bf.bellman_ford(G1 , source)[0]  
+        G8_BF = bf.bellman_ford(G2 , source)[0] 
+        G9_BF = bf.bellman_ford(G3 , source)[0]  
 
         print("source", source)
 
 
 
-        T = ut.union(G1_BF , G2_BF , G3_BF) 
+        T = ut.union([G1_BF , G2_BF , G3_BF, G4_BF , G5_BF, G6_BF , G3_BF, G7_BF , G8_BF, G9_BF]) 
 
 
         #----------------- Question 5 -------------------------------
@@ -161,7 +165,7 @@ def main() :
     plt.legend()
     plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
     plt.tight_layout()
-    plt.savefig("Plots/Analyse du nombre d'itération de l'algorithme Bellman Ford.png")
+    plt.savefig("Analyse du nombre d'itération de l'algorithme Bellman Ford.png")
     
     plt.show()
 
