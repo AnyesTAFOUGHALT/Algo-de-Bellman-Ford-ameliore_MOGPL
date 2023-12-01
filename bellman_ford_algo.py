@@ -1,7 +1,8 @@
 import networkx as nx
 import math
+import utils   as ut
 
-def bellman_ford(G , source):
+def bellman_ford(G , source, ordre = None):
     """
     Ajouter le nb d'itérations
     """
@@ -23,21 +24,62 @@ def bellman_ford(G , source):
     #         new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
     # return new_G
 
-    
-    distance = dict.fromkeys(list(G.nodes) , [math.inf, None])
-    distance[source] = [0 , None]   
-    for v in range(len(list(G.nodes))-1):
-        for arete in list(G.edges):
-            new_dist =  distance[arete[0]][0] + G.get_edge_data(arete[0], arete[1])['weight']
-            if distance[arete[1]][0] > new_dist :
-                distance[arete[1]] = [new_dist , arete[0]]
 
-    new_G = nx.DiGraph()
-    for v in list(G.nodes) :
-        s = distance[v][1]
-        if s != None :
-            new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
-    return new_G
+    # nb_iter = 0    
+    # distance = dict.fromkeys(list(G.nodes) , [math.inf, None])
+    # distance[source] = [0 , None]   
+    # for v in range(len(list(G.nodes))-1):
+    #     for arete in list(G.edges):
+    #         nb_iter += 1
+    #         new_dist =  distance[arete[0]][0] + G.get_edge_data(arete[0], arete[1])['weight']
+    #         if distance[arete[1]][0] > new_dist :
+    #             distance[arete[1]] = [new_dist , arete[0]]
+
+    # new_G = nx.DiGraph()
+    # for v in list(G.nodes) :
+    #     s = distance[v][1]
+    #     if s != None :
+    #         new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
+    # return new_G , nb_iter
+
+    ordre_traitement = list(G.nodes)
+    if ordre!= None :
+        ordre_traitement = ordre
+    plus_courts_chemins = [] 
+    distance = dict.fromkeys(list(G.nodes) , [math.inf, None])
+    distance [source] = [0,None]
+    plus_courts_chemins.append(distance)
+    nb_etapes = 1
+
+    while(True):
+        if nb_etapes == len(ordre_traitement) :
+            raise ValueError("Belman ford diverge => presence de cycle negatif")
+        
+        nouveaux_plus_courts_chemins = plus_courts_chemins[nb_etapes - 1].copy()
+        for sommet in ordre_traitement :
+            etape_precedente = plus_courts_chemins[nb_etapes - 1]
+            for v in list(G.predecessors(sommet) ):
+                new_chemin =  etape_precedente[v][0] + G.get_edge_data(v,sommet)['weight']
+
+                if new_chemin < nouveaux_plus_courts_chemins[sommet][0]:
+                    nouveaux_plus_courts_chemins[sommet] = [new_chemin,v]
+            
+
+        if ut.sont_similaires(nouveaux_plus_courts_chemins,etape_precedente):
+            plus_courts_chemins.append(nouveaux_plus_courts_chemins)
+            new_G = nx.DiGraph()
+            distance = plus_courts_chemins[nb_etapes-1]
+            for v in list(G.nodes) :
+                s = distance[v][1]
+                if s != None :
+                    new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
+            return new_G , nb_etapes
+        else : 
+            nb_etapes += 1
+            plus_courts_chemins.append(nouveaux_plus_courts_chemins)
+
+
+    
 
 
 
