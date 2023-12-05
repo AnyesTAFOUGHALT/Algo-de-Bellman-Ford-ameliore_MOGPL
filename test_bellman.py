@@ -38,125 +38,59 @@ print(bf.GloutonFas(G))
 
 
 #ut.draw_graph(ut.genrartion_de_graphes(G))
-N = 5
-p = 0.4
+N = 5 # Nombre de noeuds
+p = 0.4 # Probabilité de présence d'une arête 
 
-def main() :
-    #-------------------Question 3 & 4 ----------------------------
-    #génération d'un graph G
-    # G = nx.erdos_renyi_graph(N, p, directed=True)
+def generation_graphes_test(G,n):
+    """Generation de N grapes avec des poids differents"""
+    graphes = []
+    for i in range(n):
+        graphes.append(ut.genrartion_de_graphes(G))
+    return graphes
 
-    # G1 = ut.genrartion_de_graphes(G)
-    # print("ff")
-    # G2 = ut.genrartion_de_graphes(G)
-    # print("ff")
-
-    # G3 = ut.genrartion_de_graphes(G)
-    # print("ff")
-    
-    # H = ut.genrartion_de_graphes(G)
-    # print("ff")
-    
-    # source =  ut.source(G)
-    # print("ff")
-
-    # #------------------- Question 4 ----------------------------
-    # G1_BF = bf.bellman_ford(G1 , source)[0]  
-    # print("ff")
-
-    # G2_BF = bf.bellman_ford(G2 , source)[0] 
-    # print("ff")
-
-    # G3_BF = bf.bellman_ford(G3 , source)[0]  
-
-    # print("source", source)
-
-    # pos = ut.draw_graph(G1,"G1")
-
-    # ut.draw_graph(G1_BF,"G1_BF" , pos)
-    # ut.draw_graph(G2,"G2", pos)       
-    # ut.draw_graph(G2_BF,"G2_BF" , pos)
-    # ut.draw_graph(G3,"G3", pos)
-    # ut.draw_graph(G3_BF,"G3_BF" , pos)
-
-    # T = ut.union(G1_BF , G2_BF , G3_BF) 
-
-    # ut.draw_graph(T,"T",pos)
-
-    # #----------------- Question 5 -------------------------------
-    # ordre = bf.GloutonFas(T)
-
-    # #----------------- Question 6 -------------------------------
-    # H_BF , nb_iter= bf.bellman_ford(H , source , ordre)
-    # print("Le nombre d'itération avec l'ordre ", ordre," est : ", nb_iter)
-    # ut.draw_graph(H_BF,"H_BF" , pos)
-
-    # #----------------- Question 7 -------------------------------
-    # ordre_alea  = list(range(G.number_of_nodes()))
-    # random.shuffle(ordre_alea)
-
-    # H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
-    # print("Le nombre d'itération avec l'ordre ", ordre_alea," est : ", nb_iter)
-    # ut.draw_graph(H_BF_alea,"H_BF" , pos)
+def bellman_ford_liste (graphes,source):
+    """on applique bellman ford sur la liste des graphe et on revoit l'union de ces plus courts chemins"""
+    bfs = []
+    for g in graphes:
+        bfs.append(bf.bellman_ford(g , source)[0] )
+    return bfs
 
 
-    #----------------- Question 9 -------------------------------
-    iterations = 20
+def comparaison_avec_et_sans_pretraitement(iterations,n,p,nb_G):
     nb_iter_with_gloutonFas_ordre= []
     nb_iter_alea = []
+
     for i in range(iterations) :
         print("iteration",i)
         #génération d'un graph G
-        G = nx.erdos_renyi_graph(N, p, directed=True)
+        G = None
 
-        G1 = ut.genrartion_de_graphes(G)
-        G2 = ut.genrartion_de_graphes(G)
-        G3 = ut.genrartion_de_graphes(G)
-        G4 = ut.genrartion_de_graphes(G)
-        G5 = ut.genrartion_de_graphes(G)
-        G6 = ut.genrartion_de_graphes(G)
-        G7 = ut.genrartion_de_graphes(G)
-        G8 = ut.genrartion_de_graphes(G)
-        G9 = ut.genrartion_de_graphes(G)
-        
+        source = None
+        while(True):
+            G = nx.erdos_renyi_graph(n, p, directed=True)
+            source = ut.source(G)
+            if source != None :
+                break
+
+        G_avec_poids_diff = generation_graphes_test(G,nb_G)
 
         H = ut.genrartion_de_graphes(G)
         
-        source =  ut.source(G)
-        
+        Gs_BFs =  bellman_ford_liste(G_avec_poids_diff,source)
 
-        #------------------- Question 4 ----------------------------
-        G1_BF = bf.bellman_ford(G1 , source)[0]  
-        G2_BF = bf.bellman_ford(G2 , source)[0] 
-        G3_BF = bf.bellman_ford(G3 , source)[0]  
-        G4_BF = bf.bellman_ford(G1 , source)[0]  
-        G5_BF = bf.bellman_ford(G2 , source)[0] 
-        G6_BF = bf.bellman_ford(G3 , source)[0]  
-        G7_BF = bf.bellman_ford(G1 , source)[0]  
-        G8_BF = bf.bellman_ford(G2 , source)[0] 
-        G9_BF = bf.bellman_ford(G3 , source)[0]  
+        T = ut.union(Gs_BFs) 
 
-        print("source", source)
+        ordre_optimale = bf.GloutonFas(T)
 
-
-
-        T = ut.union([G1_BF , G2_BF , G3_BF, G4_BF , G5_BF, G6_BF , G3_BF, G7_BF , G8_BF, G9_BF]) 
-
-
-        #----------------- Question 5 -------------------------------
-        ordre = bf.GloutonFas(T)
-
-        #----------------- Question 6 -------------------------------
-        H_BF , nb_iter= bf.bellman_ford(H , source , ordre)
-        print("Le nombre d'itération avec l'ordre ", ordre," est : ", nb_iter)
+        H_BF , nb_iter= bf.bellman_ford(H , source , ordre_optimale)
+        print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale," est : ", nb_iter)
         nb_iter_with_gloutonFas_ordre.append(nb_iter)
 
-        #----------------- Question 7 -------------------------------
         ordre_alea  = list(range(G.number_of_nodes()))
         random.shuffle(ordre_alea)
 
         H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
-        print("Le nombre d'itération avec l'ordre ", ordre_alea," est : ", nb_iter)
+        print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter)
         nb_iter_alea.append(nb_iter)
 
     plt.plot( nb_iter_with_gloutonFas_ordre, 'b', label="Nombre d'itération avec l'orde de GloutonFast")
@@ -169,6 +103,72 @@ def main() :
     
     plt.show()
 
+
+def main() :
+    #-------------------Question 3---------------------------#
+
+    #génération d'un graph G
+    G = nx.erdos_renyi_graph(N, p, directed=True)
+    G1, G2, G3, H = generation_graphes_test(G,4)
+
+    #-------------------Question 4----------------------------#
+
+    # Choix d'une racine qui atteint au moins |V|/2 sommets : 
+    source =  ut.source(G)
+    print("La source designée est : ", source)
+
+    G1_BF,G2_BF,G3_BF =  bellman_ford_liste([G1,G2,G3],source)
+    #Union des plus courts chemins
+    T = ut.union([ G1_BF,G1_BF,G1_BF ])
+
+    #-------------------Question 5----------------------------#
+
+    #On recupère l'odre optimal renvoyé par l'algo GloutonFas
+    ordre_optimal = bf.GloutonFas(T)
+
+    # Affichage des graphes :
+    #G1
+    pos = ut.draw_graph(G1,"G1")
+    ut.draw_graph(G1_BF,"G1_BF" , pos)
+    #G2
+    ut.draw_graph(G2,"G2", pos)       
+    ut.draw_graph(G2_BF,"G2_BF" , pos)
+    #G3
+    ut.draw_graph(G3,"G3", pos)
+    ut.draw_graph(G3_BF,"G3_BF" , pos)
+    #T
+    ut.draw_graph(T,"T",pos)
+
+    #-------------------Question 6----------------------------#
+
+    # On applique bellman Ford sur H avec l'odre optimal obtenu 
+    H_BF , nb_iter= bf.bellman_ford(H , source , ordre_optimal)
+    print("Le nombre d'itération avec l'ordre optimal : ", ordre_optimal," est : ", nb_iter)
+    
+    #Affichage : 
+    ut.draw_graph(H_BF,"H_BF" , pos)
+    #-------------------Question 7----------------------------#
+
+    # On applique bellman Ford sur H avec un ordre aletoire obtenu 
+    ordre_alea  = list(range(G.number_of_nodes()))
+    random.shuffle(ordre_alea)  
+    H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
+    print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter)
+    
+    #Affichage :
+    ut.draw_graph(H_BF_alea,"H_BF" , pos)
+
+
+
+    #------------------- Question 9 ---------------------------#
+    iterations = 100
+    comparaison_avec_et_sans_pretraitement(iterations,N,p,3)
+
+
+    #----------------- Question 10 ----------------------------#
+
+    #Ici on peut passer en parametres le nombre de graphe qu'on l'on souhaiterai utiliser 
+    comparaison_avec_et_sans_pretraitement(iterations,N,p,5)
 
 if __name__ == "__main__":
     main()

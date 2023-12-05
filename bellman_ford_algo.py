@@ -6,45 +6,6 @@ def bellman_ford(G , source, ordre = None):
     """
     Ajouter le nb d'itérations
     """
-
-    ordre_traitement = list(G.nodes)
-    if ordre!= None :
-        ordre_traitement = ordre
-    plus_courts_chemins = [] 
-    distance = dict.fromkeys(list(G.nodes) , [math.inf, None])
-    distance [source] = [0,None]
-    plus_courts_chemins.append(distance)
-    nb_etapes = 1
-
-    while(True): 
-        nouveaux_plus_courts_chemins = plus_courts_chemins[nb_etapes-1].copy()
-        for sommet in ordre_traitement :
-            etape_precedente = plus_courts_chemins[nb_etapes-1]
-            for v in list(G.predecessors(sommet) ):
-                new_chemin =  etape_precedente[v][0] + G.get_edge_data(v,sommet)['weight']
-
-                if new_chemin < nouveaux_plus_courts_chemins[sommet][0]:
-                    nouveaux_plus_courts_chemins[sommet] = [new_chemin,v]
-            
-
-        if ut.sont_similaires(nouveaux_plus_courts_chemins,plus_courts_chemins[nb_etapes-1]):
-            plus_courts_chemins.append(nouveaux_plus_courts_chemins)
-            new_G = nx.DiGraph()
-            distance = plus_courts_chemins[nb_etapes-1]
-            for v in list(G.nodes) :
-                s = distance[v][1]
-                if s != None :
-                    new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
-            return new_G , nb_etapes-1
-        else : 
-            nb_etapes += 1
-            plus_courts_chemins.append(nouveaux_plus_courts_chemins)
-
-
-def bellman_ford_2(G , source, ordre = None):
-    """
-    Ajouter le nb d'itérations
-    """
     N = len(list(G.nodes))
     ordre_traitement = list(G.nodes)
     if ordre!= None :
@@ -61,7 +22,7 @@ def bellman_ford_2(G , source, ordre = None):
         for sommet in ordre_traitement :
             etape_precedente = plus_courts_chemins[nb_etapes - 1]
             for v in list(G.predecessors(sommet) ):
-                new_chemin =  etape_precedente[v][0] + G.get_edge_data(v,sommet)['weight']
+                new_chemin =  nouveaux_plus_courts_chemins[v][0] + G.get_edge_data(v,sommet)['weight']
 
                 if new_chemin < nouveaux_plus_courts_chemins[sommet][0]:
                     nouveaux_plus_courts_chemins[sommet] = [new_chemin,v]
@@ -72,7 +33,6 @@ def bellman_ford_2(G , source, ordre = None):
         
     new_G = nx.DiGraph()
     distance = plus_courts_chemins[nb_etapes -1]
-    print(plus_courts_chemins )
     for v in list(G.nodes) :
         s = distance[v][1]
         if s != None :
