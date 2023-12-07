@@ -86,18 +86,19 @@ def genrartion_de_graphes2(G):
             return G_poid
 def genrartion_de_graphes(G):#racha
     G_poid = G.copy()
+    for arete in list(G_poid.edges()): 
+        G_poid[arete[0]][arete[1]]['weight'] = random.randint(-10, 10)
     while True:
-        for arete in list(G_poid.edges()): 
-            G_poid[arete[0]][arete[1]]['weight'] = random.randint(-10, 10)
         cycle = False
+        cout = 0
         for v in list(G.nodes):
             pcc , nb_iter = bf.bellman_ford_3(G_poid , v)
-            #print(pcc)
+            # print(pcc)
             cout = pcc[nb_iter][v][0]
-            #print("cout:",cout,"nbiter",nb_iter)
+            # print("cout:",cout,"nbiter",nb_iter)
             if cout<0:
                 cycle = True
-                G_poid[pcc[nb_iter][v][1]][v]['weight'] = cout
+                G_poid[pcc[nb_iter][v][1]][v]['weight'] = -cout
         if not cycle:
             return G_poid
 
