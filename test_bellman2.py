@@ -39,7 +39,7 @@ print(bf.GloutonFas(G))
 
 #ut.draw_graph(ut.genrartion_de_graphes(G))
 N = 20 # Nombre de noeuds
-p = 0.4 # Probabilité de présence d'une arête 
+p = 0.7 # Probabilité de présence d'une arête 
 
 def generation_graphes_test(G,n):
     """Generation de N grapes avec des poids differents"""
@@ -57,114 +57,9 @@ def bellman_ford_liste (graphes,source):
     return bfs
 
 
-# def comparaison_avec_et_sans_pretraitement(iterations,n,p,nb_G):
-#     nb_iter_with_gloutonFas_ordre= []
-#     nb_iter_alea = []
-
-#     for i in range(iterations) :
-#         print("iteration",i)
-#         #génération d'un graph G
-#         G = None
-#         print("1")
-#         source = None
-#         while(True):
-#             G = nx.erdos_renyi_graph(n, p, directed=True)
-#             source = ut.source(G)
-#             if source != None :
-#                 break
-#         print("2")
-        
-#         G_avec_poids_diff = generation_graphes_test(G,nb_G)
-#         print("3")
-
-#         H = ut.genrartion_de_graphes(G)
-        
-#         Gs_BFs =  bellman_ford_liste(G_avec_poids_diff,source)
-
-#         T = ut.union(Gs_BFs) 
-
-#         ordre_optimale = bf.GloutonFas(T)
-
-#         H_BF , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale)
-#         print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale," est : ", nb_iter)
-#         nb_iter_with_gloutonFas_ordre.append(nb_iter)
-
-#         ordre_alea  = list(range(G.number_of_nodes()))
-#         random.shuffle(ordre_alea)
-
-#         H_BF_alea , nb_iter= bf.bellman_ford_3(H , source , ordre_alea)
-#         print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter)
-#         nb_iter_alea.append(nb_iter)
-
-#     plt.plot( nb_iter_with_gloutonFas_ordre, 'b', label="Nombre d'itération avec l'orde de GloutonFast")
-#     plt.plot(nb_iter_alea, 'r', label="Nombre d'itérations avec un ordre aléatoire")
-#     plt.ylabel('Nombre d\'itération')
-#     plt.legend()
-#     plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
-#     plt.tight_layout()
-#     plt.savefig("Analyse du nombre d'itération de l'algorithme Bellman Ford.png")
-    
-#     plt.show()
-def comparaison_avec_et_sans_pretraitement(iterations,n_min , n_max , p,nb_G):
+def comparaison_avec_et_sans_pretraitement(iterations,n,p,nb_G):
     nb_iter_with_gloutonFas_ordre= []
     nb_iter_alea = []
-    
-
-    for n in range(n_min,n_max):
-        iter_gloutonFas = 0
-        iter_alea = 0
-        print("Nombre de sommets : ", n)
-        for i in range(iterations) :
-            print("iteration",i)
-            #génération d'un graph G
-            G = None
-
-            source = None
-            while(True):
-                G = nx.erdos_renyi_graph(n, p, directed=True)
-                source = ut.source(G)
-                if source != None :
-                    break
-
-            G_avec_poids_diff = generation_graphes_test(G,nb_G)
-
-            H = ut.genrartion_de_graphes(G)
-            
-            Gs_BFs =  bellman_ford_liste(G_avec_poids_diff,source)
-
-            T = ut.union(Gs_BFs) 
-
-            ordre_optimale = bf.GloutonFas(T)
-
-            H_BF , nb_iter= bf.bellman_ford(H , source , ordre_optimale)
-            print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale," est : ", nb_iter)
-            iter_gloutonFas += nb_iter
-            
-
-            ordre_alea  = list(range(G.number_of_nodes()))
-            random.shuffle(ordre_alea)
-
-            H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
-            print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter)
-            iter_alea += nb_iter
-            
-        nb_iter_with_gloutonFas_ordre.append(iter_gloutonFas/iterations)
-        nb_iter_alea.append(iter_alea/iterations)
-
-    nb_nodes = [i for i in range(n_min , n_max)]
-    plt.plot(nb_nodes , nb_iter_with_gloutonFas_ordre, 'b', label="Nombre d'itération avec l'orde de GloutonFast")
-    plt.plot(nb_nodes ,nb_iter_alea, 'r', label="Nombre d'itérations avec un ordre aléatoire")
-    plt.ylabel('Nombre d\'itération')
-    plt.legend()
-    plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
-    plt.tight_layout()
-    plt.savefig("Analyse du nombre d'itération de l'algorithme Bellman Ford [" + str(n_min) + "," + str(n_max) + "].png")
-    
-    plt.show()
-
-def comparaison_selon_nb_graphes(iterations,n,p,nb_G1,nb_G2):
-    nb_iter_with_gloutonFas_ordre_1= []
-    nb_iter_with_gloutonFas_ordre_2 = []
 
     for i in range(iterations) :
         print("iteration",i)
@@ -178,32 +73,31 @@ def comparaison_selon_nb_graphes(iterations,n,p,nb_G1,nb_G2):
             if source != None :
                 break
         print("2")
-
-        G_avec_poids_diff_1 = generation_graphes_test(G,nb_G1)
-        G_avec_poids_diff_2 = generation_graphes_test(G,nb_G2)
+        
+        G_avec_poids_diff = generation_graphes_test(G,nb_G)
         print("3")
 
         H = ut.genrartion_de_graphes(G)
         
-        Gs_BFs_1 =  bellman_ford_liste(G_avec_poids_diff_1,source)
-        Gs_BFs_2 =  bellman_ford_liste(G_avec_poids_diff_2,source)
+        Gs_BFs =  bellman_ford_liste(G_avec_poids_diff,source)
 
-        T1 = ut.union(Gs_BFs_1) 
-        T2 = ut.union(Gs_BFs_2) 
+        T = ut.union(Gs_BFs) 
 
-        ordre_optimale_1 = bf.GloutonFas(T1)
-        ordre_optimale_2 = bf.GloutonFas(T2)
+        ordre_optimale = bf.GloutonFas(T)
 
-        H_BF , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale_1)
-        print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale_1," est : ", nb_iter)
-        nb_iter_with_gloutonFas_ordre_1.append(nb_iter)
+        H_BF , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale)
+        print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale," est : ", nb_iter)
+        nb_iter_with_gloutonFas_ordre.append(nb_iter)
 
-        H_BF_alea , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale_2)
-        print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_optimale_2," est : ", nb_iter)
-        nb_iter_with_gloutonFas_ordre_2.append(nb_iter)
+        ordre_alea  = list(range(G.number_of_nodes()))
+        random.shuffle(ordre_alea)
 
-    plt.plot( nb_iter_with_gloutonFas_ordre_1, 'b', label="Nombre d'itération avec l'orde de GloutonFast 1")
-    plt.plot(nb_iter_with_gloutonFas_ordre_2, 'r', label="Nombre d'itération avec l'orde de GloutonFast 2")
+        H_BF_alea , nb_iter= bf.bellman_ford_3(H , source , ordre_alea)
+        print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter)
+        nb_iter_alea.append(nb_iter)
+
+    plt.plot( nb_iter_with_gloutonFas_ordre, 'b', label="Nombre d'itération avec l'orde de GloutonFast")
+    plt.plot(nb_iter_alea, 'r', label="Nombre d'itérations avec un ordre aléatoire")
     plt.ylabel('Nombre d\'itération')
     plt.legend()
     plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
@@ -211,6 +105,115 @@ def comparaison_selon_nb_graphes(iterations,n,p,nb_G1,nb_G2):
     plt.savefig("Analyse du nombre d'itération de l'algorithme Bellman Ford.png")
     
     plt.show()
+def comparaison_avec_et_sans_pretraitement(iterations,n_min , n_max , p,nb_G):
+    nb_iter_with_gloutonFas_ordre= []
+    nb_iter_alea = []
+    
+
+    for n in range(n_min,n_max):
+        iter_gloutonFas = 0
+        iter_alea = 0
+        print("Nb sommets :",n)
+        for i in range(iterations) :
+            print("iteration",i)
+            #génération d'un graph G
+            G = None
+            source = 0
+            while(True):
+                G = ut.generation_graphe(n , p)
+                source_existe = ut.source(G,source)
+                if source_existe  :
+                    break
+
+            G_avec_poids_diff = generation_graphes_test(G,nb_G)
+            #print("NOmbre de sommet de l'un des graphes test",len(G_avec_poids_diff[0].nodes))
+            H = ut.genrartion_de_graphes(G)
+            
+            Gs_BFs =  bellman_ford_liste(G_avec_poids_diff,source)
+
+            T = ut.union(Gs_BFs)
+            #pri("Taille de T",len(T))
+            ordre_optimale = bf.GloutonFas(T)
+
+            H_BF , nb_iter_1= bf.bellman_ford_3(H , source , ordre_optimale)
+            #print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale," est : ", nb_iter_1)
+            iter_gloutonFas += nb_iter_1
+            
+
+            ordre_alea  = list(range(G.number_of_nodes()))
+            random.shuffle(ordre_alea)
+
+            H_BF_alea , nb_iter_2= bf.bellman_ford_3(H , source , ordre_alea)
+            #print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter_2)
+            iter_alea += nb_iter_2
+            
+        nb_iter_with_gloutonFas_ordre.append(iter_gloutonFas/iterations)
+        # print(nb_iter_with_gloutonFas_ordre)
+        nb_iter_alea.append(iter_alea/iterations)
+        # print(nb_iter_alea)
+
+
+    nb_nodes = [i for i in range(n_min , n_max)]
+    plt.plot(nb_nodes , nb_iter_with_gloutonFas_ordre, 'b', label="Nombre d'itération avec l'orde de GloutonFast")
+    plt.plot(nb_nodes ,nb_iter_alea, 'r', label="Nombre d'itérations avec un ordre aléatoire")
+    plt.ylabel('Nombre d\'itération')
+    plt.legend()
+    plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
+    plt.tight_layout()
+    plt.savefig("Analyse du nombre d'itération de l'algorithme Bellman Ford [" + str(n_min) + "," + str(n_max) + "].png")
+    
+    plt.show()
+
+# def comparaison_selon_nb_graphes(iterations,n,p,nb_G1,nb_G2):
+#     nb_iter_with_gloutonFas_ordre_1= []
+#     nb_iter_with_gloutonFas_ordre_2 = []
+
+#     for i in range(iterations) :
+#         print("iteration",i)
+#         #génération d'un graph G
+#         G = None
+#         print("1")
+#         source = None
+#         while(True):
+#             G = ut.generation_graphe(n , p)
+#             source = ut.source(G,0)
+#             print()
+#             if source  :
+#                 break
+#         print("2")
+
+#         G_avec_poids_diff_1 = generation_graphes_test(G,nb_G1)
+#         G_avec_poids_diff_2 = generation_graphes_test(G,nb_G2)
+#         print("3")
+
+#         H = ut.genrartion_de_graphes(G)
+        
+#         Gs_BFs_1 =  bellman_ford_liste(G_avec_poids_diff_1,source)
+#         Gs_BFs_2 =  bellman_ford_liste(G_avec_poids_diff_2,source)
+
+#         T1 = ut.union(Gs_BFs_1) 
+#         T2 = ut.union(Gs_BFs_2) 
+
+#         ordre_optimale_1 = bf.GloutonFas(T1)
+#         ordre_optimale_2 = bf.GloutonFas(T2)
+
+#         H_BF , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale_1)
+#         print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale_1," est : ", nb_iter)
+#         nb_iter_with_gloutonFas_ordre_1.append(nb_iter)
+
+#         H_BF_alea , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale_2)
+#         print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_optimale_2," est : ", nb_iter)
+#         nb_iter_with_gloutonFas_ordre_2.append(nb_iter)
+
+#     plt.plot( nb_iter_with_gloutonFas_ordre_1, 'b', label="Nombre d'itération avec l'orde de GloutonFast 1")
+#     plt.plot(nb_iter_with_gloutonFas_ordre_2, 'r', label="Nombre d'itération avec l'orde de GloutonFast 2")
+#     plt.ylabel('Nombre d\'itération')
+#     plt.legend()
+#     plt.suptitle("Analyse du nombre d'itération de l'algorithme Bellman Ford" )
+#     plt.tight_layout()
+#     plt.savefig("Analyse du nombre d'itération de l'algorithme Bellman Ford.png")
+    
+#     plt.show()
 
 
 def main() :
@@ -271,7 +274,7 @@ def main() :
 
     # #------------------- Question 9 ---------------------------#
     # iterations = 100
-    comparaison_avec_et_sans_pretraitement(100,5 , 20 , p,3)
+    comparaison_avec_et_sans_pretraitement(20,3,4, p,3)
 
 
 
@@ -298,5 +301,15 @@ def main() :
     # print(iter)
     # print(new_G)
     # ut.draw_graph(ut.genrartion_de_graphes(G),"ff")
+    # source = 0
+    # while(True):
+    #     G = ut.generation_graphe(5 , p)
+    #     source_existe = ut.source(G,source)
+    #     if source_existe  :
+    #         break
+    # print("2")
+    # G_poid = ut.genrartion_de_graphes(G)
+    # ut.draw_graph(G_poid,"ee")
+    # print(bf.bellman_ford_3(G,source)[0])
 if __name__ == "__main__":
     main()

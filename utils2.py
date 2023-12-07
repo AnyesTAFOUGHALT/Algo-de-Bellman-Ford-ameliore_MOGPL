@@ -107,12 +107,13 @@ def genrartion_de_graphes(G):#racha
 #--------------------------------------------
 def generation_graphe(nb_sommets , p) : #La fonction que j'ai ajouter pour la génération de graphe
     G = nx.DiGraph()
+    G.add_nodes_from([i for i in range(nb_sommets)])
     for source in range(nb_sommets) :
-        for dist in range(nb_sommets) :
+        for dist in range(1,nb_sommets,1) :
             if source!=dist :
                 n = random.random()
                 if n<p :
-                    G.add_edge(source, dist)
+                    G.add_edge(source, dist,weight=0)
     return G
 
         
@@ -205,9 +206,9 @@ def union(listG):
             if not T.has_edge(u,v):
                 T.add_edge(u , v)
     return T
-def source(G) :
+def source(G,noeud) :
     n = G.number_of_nodes()/2
     for v in list(G.nodes) :
-        if len(nx.descendants(G, v) ) >= n :
-            return v
-    return None
+        if v == noeud and len(nx.descendants(G, v) ) >= n :
+            return True
+    return False

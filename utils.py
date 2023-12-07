@@ -74,7 +74,7 @@ def genrartion_de_graphes(G):
     G_poid = G.copy()
     while True:
         for arete in list(G_poid.edges()): 
-            G_poid[arete[0]][arete[1]]['weight'] = random.randint(-10, 10)
+            G_poid[arete[0]][arete[1]][weight] = random.randint(-10, 10)
 
         possede_cycle = False
         for v in list(G.nodes):

@@ -86,7 +86,7 @@ def comparaison_avec_et_sans_pretraitement(iterations,n_min , n_max , p,nb_G):
 
             ordre_optimale = bf.GloutonFas(T)
 
-            H_BF , nb_iter= bf.bellman_ford(H , source , ordre_optimale)
+            H_BF , nb_iter= bf.bellman_ford_3(H , source , ordre_optimale)
             print("Le nombre d'itération avec l'ordre optimale : ", ordre_optimale," est : ", nb_iter)
             iter_gloutonFas += nb_iter
             
@@ -94,7 +94,7 @@ def comparaison_avec_et_sans_pretraitement(iterations,n_min , n_max , p,nb_G):
             ordre_alea  = list(range(G.number_of_nodes()))
             random.shuffle(ordre_alea)
 
-            H_BF_alea , nb_iter= bf.bellman_ford(H , source , ordre_alea)
+            H_BF_alea , nb_iter= bf.be(H , source , ordre_alea)
             print("Le nombre d'itération avec l'ordre aleatoire : ", ordre_alea," est : ", nb_iter)
             iter_alea += nb_iter
             
