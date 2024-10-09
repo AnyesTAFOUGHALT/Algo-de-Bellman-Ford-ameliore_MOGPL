@@ -4,7 +4,11 @@ import utils   as ut
 
 def bellman_ford(G , source, ordre = None):
     """
-    Ajouter le nb d'itérations
+    G : un graphe dérigée 
+    source : la source à partir de la quelle on applique Bellman Ford
+    orde : l'ordre de traitement des noeuds
+
+    return : la matrice des distance et le nombre d'itérations
     """
     N = len(list(G.nodes))
     ordre_traitement = list(G.nodes)
@@ -15,33 +19,31 @@ def bellman_ford(G , source, ordre = None):
     distance [source] = [0,None]
     plus_courts_chemins.append(distance)
     nb_etapes = 0
-
-    while(nb_etapes<N):
+    while(nb_etapes<=N):
+        #print("nb_etapes : ", nb_etapes , ", mat : ", plus_courts_chemins )
         nb_etapes += 1
         nouveaux_plus_courts_chemins = plus_courts_chemins[nb_etapes - 1].copy()
+
         for sommet in ordre_traitement :
             etape_precedente = plus_courts_chemins[nb_etapes - 1]
+
             for v in list(G.predecessors(sommet) ):
                 new_chemin =  nouveaux_plus_courts_chemins[v][0] + G.get_edge_data(v,sommet)['weight']
 
                 if new_chemin < nouveaux_plus_courts_chemins[sommet][0]:
                     nouveaux_plus_courts_chemins[sommet] = [new_chemin,v]
-            
+        
         if ut.sont_similaires(nouveaux_plus_courts_chemins,etape_precedente):
             break
-        plus_courts_chemins.append(nouveaux_plus_courts_chemins)
-        
-    new_G = nx.DiGraph()
-    distance = plus_courts_chemins[nb_etapes -1]
-    for v in list(G.nodes) :
-        s = distance[v][1]
-        if s != None :
-            new_G.add_edge(s, v, weight=G.get_edge_data(s, v)['weight'])
-    return new_G , nb_etapes-1
+        if nb_etapes <= N :
+            plus_courts_chemins.append(nouveaux_plus_courts_chemins)
+
+    return plus_courts_chemins , nb_etapes-1
 
 
 
 def getSources(G):
+    """ Cette fonction retourne une liste de tous les noeuds de G qui n'ont pas d'arcs entrants """
     s = []
     for v in list(G.nodes):
         if len(list(G.predecessors(v))) == 0 :
@@ -50,6 +52,7 @@ def getSources(G):
 
 
 def getPuits(G):
+    """ Cette fonction retourne une liste de tous les noeuds de G qui n'ont pas d'arcs sortants """
     p = []
     for v in list(G.nodes):
         if len(list(G.successors(v))) == 0 :
@@ -58,6 +61,7 @@ def getPuits(G):
 
 
 def getMaxiDiff(G):
+    """ Cette fonction retourne le noeud dont la différence entre son nombre d'arcs sortants et entrants est maximale """
     maxDiff = -math.inf 
     v_max = None
     for v in list(G.nodes):

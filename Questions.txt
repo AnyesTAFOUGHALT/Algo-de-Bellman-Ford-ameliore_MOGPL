@@ -1,6 +1,0 @@
-Questions : 
-La source doit vraiment pas avoir de precedents ou pas forcement ?
-La generation de graphes doit vraiment exiger l'existence d'un dommet ayant un degre de |v|/2?
-La generation aleatoire doit on mettre la meme proba d'existance daretes ?
-POur l 'union doit on prendre pour chaque couple de sommets l'arete ayant le min des poinds?
-Bellman-ford le nombre d'iter totale ou quoi?!
